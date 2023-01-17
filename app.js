@@ -18,6 +18,9 @@ mongoose.connect(process.env.dburl)
     console.log(err);
 });
 app.use(authroutes);
+app.use('/',(req,res)=>{
+  res.json({msg:"success"})
+})
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
