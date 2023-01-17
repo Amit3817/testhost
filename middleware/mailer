@@ -1,0 +1,43 @@
+const User = require('../model/user');
+const sgMail = require('@sendgrid/mail');
+const mongoose=require('mongoose');
+const bcrypt=require("bcrypt");
+
+const sent=async (req,res,next)=>{
+  try{
+  const emailId=req.body.email;
+  sgMail.setApiKey(process.env.sgapi);
+  const otpGenerator = require('otp-generator')
+  
+  const otp=otpGenerator.generate(4, { upperCaseAlphabets: false,lowerCaseAlphabets: false, specialChars: false });
+  
+  const msg = {
+    to: emailId,
+    from: 'amit2113001@akgec.ac.in',
+    subject: 'OTP for CrushFind',
+    text: `Your otp is ${otp}`,
+  };
+  const msg2=sgMail
+    .send(msg)
+    if(msg2){
+      const hashotp=await bcrypt.hash(otp,12);
+      const updated= await User.updateOne({email:emailId.toLowerCase()},{
+        $set:{
+           otp:hashotp,
+           expireotp:Date.now()+120000
+        }});
+        console.log('mail sent');
+        return res.json({success:true,msg:"User created successfully. Check mail"});
+    }
+}
+catch(err)
+{      
+  console.log(err);
+  console.log('mail not sent');
+  return res.json({success:true,msg:"Mail not sent2"});
+}
+}
+
+module.exports={sent}
+
+
