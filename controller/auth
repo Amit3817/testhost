@@ -108,7 +108,7 @@ const forgotpassword=async (req,res,next)=>{
 
 const otpverify=async (req,res,next)=>{
    try{
-      const email=req.body.email;
+      const email=req.user.email;
       const otp=req.body.otp;
       const user=await User.findOne({email:email.toLowerCase()});
       if(!user)

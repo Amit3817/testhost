@@ -67,7 +67,7 @@ router.post('/login',
      .isEmpty()
 
 
-  ],authcontroller.otpverify);
+  ],tokenverify.verifytoken,authcontroller.otpverify);
 
 
   router.put('/changepassword',
