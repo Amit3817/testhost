@@ -20,7 +20,11 @@ router.post('/signup',
     .trim()
     .isLength({min:8}),
 
-    body('username','Please enter valid name')
+    body('name','Please enter valid name')
+    .trim()
+    .isLength({min:2}),
+
+    body('gender','Gender not selected')
     .trim()
     .isLength({min:2})
 

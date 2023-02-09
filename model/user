@@ -13,11 +13,15 @@ const userschema=new schema({
         type:String,
         required:true
     },
-    username:{
+    name:{
         type:String,
         required:true
     },
-        otp:{
+    gender:{
+        type:String,
+        required:true
+    },
+  otp:{
         type:String
     },
 
