@@ -9,12 +9,14 @@ const nodemailer=require('nodemailer')
 const sent=async (req,res,next)=>{
   try{
   const emailId=req.body.email;
-  const transport = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-        user: 'vladimir.feest@ethereal.email',
-        pass: 'u6jQNVxJdKCaZ35dpM'
+  const transport=nodemailer.createTransport({
+    service:'gmail',
+    auth:{
+        user:process.env.user,
+        pass:process.env.pass,
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
   const otpGenerator = require('otp-generator')
