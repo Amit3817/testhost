@@ -6,14 +6,12 @@ const nodemailer=require('nodemailer')
 const sent=async (req,res,next)=>{
   try{
   const emailId=req.body.email;
-  const transport=nodemailer.createTransport({
-    host:"smtp-mail.outlook.com",
-    auth:{
-        user:process.env.user,
-        pass:process.env.pass,
-    },
-    tls: {
-        rejectUnauthorized: false
+  const transport = nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    auth: {
+        user: 'anika.stokes7@ethereal.email',
+        pass: 'ZpxMhv8byCax7WGbGC'
     }
 });
   const old=await User.findOne({email:emailId.toLowerCase()});
@@ -31,7 +29,7 @@ const sent=async (req,res,next)=>{
      text: `Your otp is ${otp}`,
  }
  
- const msg2=await transport.sendMail(mailOptions)
+ const msg2=await transport.sendMail(mailOptions);
     if(msg2){
       const token=jwt.sign({email:emailId.toLowerCase()},process.env.secretkey,{expiresIn:"1d"});
       const updated= await User.updateOne({email:emailId.toLowerCase()},{
