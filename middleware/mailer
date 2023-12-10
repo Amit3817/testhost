@@ -3,8 +3,6 @@ const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken")
 const nodemailer=require('nodemailer')
 
-
-
 const sent=async (req,res,next)=>{
   try{
   const emailId=req.body.email;
@@ -18,10 +16,19 @@ const sent=async (req,res,next)=>{
         rejectUnauthorized: false
     }
 });
-  const otpGenerator = require('otp-generator')
   const old=await User.findOne({email:emailId.toLowerCase()});
   
-  const otp=otpGenerator.generate(4, { upperCaseAlphabets: false,lowerCaseAlphabets: false, specialChars: false });
+  const otp=function generateOTP(limit) {
+          
+    // Declare a digits variable 
+    // which stores all digits
+    var digits = '0123456789';
+    let OTP = '';
+    for (let i = 0; i < limit; i++ ) {
+        OTP += digits[Math.floor(Math.random() * 10)];
+    }
+    return OTP;
+}
   
   const mailOptions={ 
      from: process.env.user,
