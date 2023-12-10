@@ -18,10 +18,7 @@ const sent=async (req,res,next)=>{
 });
   const old=await User.findOne({email:emailId.toLowerCase()});
   
-  const otp=function generateOTP(limit) {
-          
-    // Declare a digits variable 
-    // which stores all digits
+  const otp=(limit)=>{
     var digits = '0123456789';
     let OTP = '';
     for (let i = 0; i < limit; i++ ) {
