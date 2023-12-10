@@ -1,5 +1,4 @@
 const User = require('../model/user');
-const sgMail = require('@sendgrid/mail');
 const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken")
 const nodemailer=require('nodemailer')
@@ -10,7 +9,7 @@ const sent=async (req,res,next)=>{
   try{
   const emailId=req.body.email;
   const transport=nodemailer.createTransport({
-    service:'gmail',
+    host:"smtp-mail.outlook.com",
     auth:{
         user:process.env.user,
         pass:process.env.pass,
