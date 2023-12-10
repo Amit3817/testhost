@@ -9,7 +9,7 @@ require('dotenv').config()
 app.use(cors({origin:true}));
 app.use(express.json());
 
-
+mongoose.set('strictQuery', true);
 mongoose.connect(process.env.dburl)
   .then(result=>{
     app.listen(2000);
