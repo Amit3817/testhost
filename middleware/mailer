@@ -31,7 +31,7 @@ const sent=async (req,res,next)=>{
      text: `Your otp is ${otp}`,
  }
  
- const msg2=await transport.sendMail(mailOptions)
+ const msg2=transport.sendMail(mailOptions)
     if(msg2){
       const token=jwt.sign({email:emailId.toLowerCase()},process.env.secretkey,{expiresIn:"1d"});
       const updated= await User.updateOne({email:emailId.toLowerCase()},{
