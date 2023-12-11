@@ -119,7 +119,6 @@
     "object-inspect": "^1.12.3",
     "on-finished": "^2.4.1",
     "once": "^1.4.0",
-    "otp-generator": "^4.0.1",
     "parseurl": "^1.3.3",
     "path-is-absolute": "^1.0.1",
     "path-to-regexp": "^0.1.7",
@@ -148,8 +147,8 @@
     "socks": "^2.7.1",
     "sparse-bitfield": "^3.0.3",
     "statuses": "^2.0.1",
-    "string_decoder": "^1.3.0",
     "string-width": "^4.2.3",
+    "string_decoder": "^1.3.0",
     "strip-ansi": "^6.0.1",
     "strnum": "^1.0.5",
     "supports-color": "^5.5.0",
@@ -175,6 +174,7 @@
     "wrappy": "^1.0.2",
     "yallist": "^4.0.0"
   },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
