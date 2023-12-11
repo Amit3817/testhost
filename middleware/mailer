@@ -9,29 +9,21 @@ const nodemailer=require('nodemailer')
 const sent=async (req,res,next)=>{
   try{
   const emailId=req.body.email;
-  const transport=nodemailer.createTransport({
-    service:'gmail',
-    auth:{
-        user:process.env.user,
-        pass:process.env.pass,
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-});
+  sgMail.setApiKey(process.env.sgapi);
   const otpGenerator = require('otp-generator')
   const old=await User.findOne({email:emailId.toLowerCase()});
   
   const otp=otpGenerator.generate(4, { upperCaseAlphabets: false,lowerCaseAlphabets: false, specialChars: false });
   
-  const mailOptions={ 
-     from: process.env.user,
-     to: emailId,
-     subject: 'OTP for ResumeBuilder',
-     text: `Your otp is ${otp}`,
- }
+  const msg = {
+    to: emailId,
+    from: 'harsh91125@gmail.com', // Use the email address or domain you verified above
+    subject: 'OTP',
+    text: `Your otp is ${otp}`,
+    // html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+  };
  
- const msg2=transport.sendMail(mailOptions)
+ const msg2= await sgMail.send(msg);
     if(msg2){
       const token=jwt.sign({email:emailId.toLowerCase()},process.env.secretkey,{expiresIn:"1d"});
       const updated= await User.updateOne({email:emailId.toLowerCase()},{
@@ -58,8 +50,6 @@ catch(err)
 }
 
 module.exports={sent}
-
-
 
 
 
