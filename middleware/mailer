@@ -18,11 +18,14 @@ const sent=async (req,res,next)=>{
 });
   const old=await User.findOne({email:emailId.toLowerCase()});
   
+  const otp=(limit)=>{
     var digits = '0123456789';
-    let otp= '';
-    for (let i = 0; i < 4; i++ ) {
-        otp += digits[Math.floor(Math.random() * 10)];
+    let OTP = '';
+    for (let i = 0; i < limit; i++ ) {
+        OTP += digits[Math.floor(Math.random() * 10)];
     }
+    return OTP;
+}
   
   const mailOptions={ 
      from: process.env.user,
