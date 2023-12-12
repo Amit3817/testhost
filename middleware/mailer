@@ -20,8 +20,8 @@ const sent=async (req,res,next)=>{
       host: 'smtp.ethereal.email',
       port: 587,
       auth: {
-          user: 'dewayne73@ethereal.email',
-          pass: 'BXzBcJ6YdbuUQqAG17'
+          user: 'edwin9@ethereal.email',
+          pass: 'UQ4K1ejnkqHke6tkYR'
       }});
     // Message object
     let message = {
