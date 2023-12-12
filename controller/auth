@@ -54,14 +54,16 @@ catch(error){
 const login=async (req,res)=>{
    try{
 
+
    const {email,password}=req.body;  
 
 
 const user=await User.findOne({email:email.toLowerCase()});
+console.log(req.body);
 if(!user)
    return res.json({success:false,msg:"User not found"});
-if(user.emailverify)
-{
+if(user.emailverify==true)
+{      
    const cmp=await bcrypt.compare(password,user.password);
    if(!cmp)
       return res.json({success:false,msg:"Wrong password"});
@@ -110,6 +112,7 @@ const otpverify=async (req,res,next)=>{
    try{
       const email=req.user.email;
       const otp=req.body.otp;
+      console.log(email);
       const user=await User.findOne({email:email.toLowerCase()});
       if(!user)
       return res.json({success:false,msg:"User does not exists"});

@@ -9,12 +9,11 @@ const verifytoken=async (req,res,next)=>{
         const verify=await jwt.verify(token,process.env.secretkey,
         async (err,payload)=>{
             if(err){
-                return res.json({success:false,msg:"Invalid or expired token"});
+                return res.json({success:false,msg:"Invalid or expired token",msg2:err});
             }
             const {email}=payload;
             const user=await User.findOne({email});
             req.user=user;
-            console.log(req.user);
             next();
         });
         }

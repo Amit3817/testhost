@@ -2,10 +2,10 @@ const express=require('express');
 const { default: mongoose } = require('mongoose');
 const authroutes=require("./routes/authroutes");
 const cors=require("cors");
+const bodyParser = require('body-parser');
 
 const dotenv=require('dotenv');
 dotenv.config();
-console.log(process.env.sgapi);
 
 const app=express();
 app.use(cors({origin:true}));
