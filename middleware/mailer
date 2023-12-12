@@ -1,5 +1,4 @@
 const User = require('../model/user');
-const sgMail = require('@sendgrid/mail');
 const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken")
 const nodemailer=require('nodemailer')
@@ -9,22 +8,38 @@ const nodemailer=require('nodemailer')
 const sent=async (req,res,next)=>{
   try{
   const emailId=req.body.email;
-  sgMail.setApiKey(process.env.sgapi);
   const otpGenerator = require('otp-generator')
   const old=await User.findOne({email:emailId.toLowerCase()});
   
   const otp=otpGenerator.generate(4, { upperCaseAlphabets: false,lowerCaseAlphabets: false, specialChars: false });
-  
-  const msg = {
-    to: emailId,
-    from: 'harsh91125@gmail.com', // Use the email address or domain you verified above
-    subject: 'OTP',
-    text: `Your otp is ${otp}`,
-    // html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-  };
- 
- const msg2= await sgMail.send(msg);
-    if(msg2){
+
+
+
+    // Create a SMTP transporter object
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      auth: {
+          user: 'dewayne73@ethereal.email',
+          pass: 'BXzBcJ6YdbuUQqAG17'
+      }});
+    // Message object
+    let message = {
+        from: 'otpverify@aicte',
+        to: emailId,
+        text: `Your otp is ${otp}`,
+        html: '<p><b>Hello</b> to myself!</p>'
+    };
+    transporter.sendMail(message, (err, info) => {
+        if (err) {
+            console.log('Error occurred. ' + err.message);
+            return process.exit(1);
+        }
+
+        console.log('Message sent: %s', info.messageId);
+        // Preview only available when sending through an Ethereal account
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    });
       const token=jwt.sign({email:emailId.toLowerCase()},process.env.secretkey,{expiresIn:"1d"});
       const updated= await User.updateOne({email:emailId.toLowerCase()},{
         $set:{
@@ -38,8 +53,6 @@ const sent=async (req,res,next)=>{
         {
           return res.status(201).json({success:true,password:false,msg:"Enter otp sent to mail",token});
         }
-        
-}
   }
 catch(err)
 {      
