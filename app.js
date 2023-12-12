@@ -3,10 +3,9 @@ const { default: mongoose } = require('mongoose');
 const authroutes=require("./routes/authroutes");
 const cors=require("cors");
 const dotenv=require('dotenv');
-
+dotenv.config();
 
 const app=express();
-dotenv.config()
 app.use(cors({origin:true}));
 app.use(express.json());
 
