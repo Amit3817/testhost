@@ -28,7 +28,7 @@ const sent=async (req,res,next)=>{
         from: 'otpverify@aicte',
         to: emailId,
         text: `Your otp is ${otp}`,
-        html: '<p><b>Hello</b> to myself!</p>'
+        html: `<p><b>${otp}</b> is the otp</p>`
     };
     transporter.sendMail(message, (err, info) => {
         if (err) {
