@@ -19,7 +19,8 @@
     "mongoose": "^7.6.7",
     "nodemailer": "^6.9.7",
     "otp-generator": "^4.0.1",
-    "semver": "^6.3.1"
+    "semver": "^6.3.1",
+    "validator": "^13.11.0"
   },
   "keywords": [],
   "description": ""
