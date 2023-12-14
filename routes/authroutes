@@ -70,6 +70,9 @@ router.post('/login',
   ],tokenverify.verifytoken,authcontroller.otpverify);
 
 
+  router.put('/resendotp',tokenverify.verifytoken,mailer.sent);
+
+
   router.put('/changepassword',
   [
     body('newpassword','Please enter a valid mail')

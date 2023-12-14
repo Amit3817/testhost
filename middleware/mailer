@@ -7,7 +7,7 @@ const nodemailer=require('nodemailer')
 
 const sent=async (req,res,next)=>{
   try{
-  const emailId=req.body.email;
+  const emailId=req.body.email||req.user.email;
   const otpGenerator = require('otp-generator')
   const old=await User.findOne({email:emailId.toLowerCase()});
   
