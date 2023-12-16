@@ -3,6 +3,8 @@ const { default: mongoose } = require('mongoose');
 const authroutes=require("./routes/authroutes");
 const cors=require("cors");
 const bodyParser = require('body-parser');
+const path=require("path")
+const fs = require('fs');
 
 const dotenv=require('dotenv');
 dotenv.config();
@@ -20,6 +22,23 @@ mongoose.connect(process.env.dburl)
     console.log(err);
 });
 app.use(authroutes);
+app.get('/download-pdf/:affidavit', (req, res) => {
+  const {affidavit}=req.params
+  const pdfFilePath = path.join(__dirname, `pdf/${affidavit}.pdf`);
+
+  // Check if the file exists
+  if (!fs.existsSync(pdfFilePath)) {
+    return res.status(404).send('PDF file not found');
+  }
+
+  // Set headers for file download
+  res.setHeader('Content-Disposition', 'attachment; filename=downloaded.pdf');
+  res.setHeader('Content-Type', 'application/pdf');
+
+  // Stream the PDF file to the response
+  const fileStream = fs.createReadStream(pdfFilePath);
+  fileStream.pipe(res);
+});
 app.use('/',(req,res)=>{
   res.json({msg:"success"})
 })
