@@ -1,0 +1,143 @@
+const User=require('../model/user');
+
+const terOperationalExpense=async (req,res)=>{
+    try{
+    const {ter,oExpense}=req.body
+    if(!ter)
+    {
+     return res.json({success:false,msg:"Please enter the option"});
+    }
+    const user=req.user
+    var fees;
+    var uter;
+    var program=new Array();
+    var uoExpense;
+    if(ter=="1")
+    {
+      fees=user.fees+6.60
+      uter=6.60
+
+    }
+    else if(ter="2")
+    {
+        uter=0;
+    }
+    else if(ter="3")
+    {
+        fees=user.fees+8.80
+        uter=8.80;
+    }
+    else if(ter="4")
+    {
+        fees=user.fees+2.20
+        uter=2.20;
+    }
+    if(oExpense=="1")
+    {
+       fees=user.fees+100
+       uoExpense=100,
+       program.push("Engineering and technology")
+    }
+    else if(oExpense=="2"||oExpense=="3"||oExpense=="4"||oExpense=="5"||oExpense=="6"||oExpense=="7")
+    {
+        fees=user.fees+50
+        uoExpense=50
+        if(oExpense=="2")
+        program.push("Plaaning")
+        if(oExpense=="3")
+        program.push("Applied Arts and Crafts")
+        if(oExpense=="4")
+        program.push("Design")
+        if(oExpense=="5")
+        program.push("Hotel Management and Catering Technology")
+        if(oExpense=="6")
+        program.push("Computer Apllication (MCA)")
+        if(oExpense=="7")
+        program.push("Management")
+    }
+
+
+   const updated= await User.updateOne({email:req.user.email},{
+    $set:{
+       fees,
+       ter:uter,
+       oExpense:uoExpense,
+       programs:[...program],
+    }});
+    if(updated)
+    {
+       return res.json({success:true,msg:"Ter updated",programs:program,token:req.user.token});
+    }
+
+    return res.json({success:false,msg:"Ter not recorded"});
+
+}
+catch(err){
+    console.log(err);
+    next(err);
+ }
+}
+
+const security=async (req,res)=>{
+    try{
+        const {secDeposit}=req.body
+        const user=req.user
+        var fees=user.fees;
+
+
+
+        function calcharge(i,j){
+             if(j==0)
+             return 12
+            else if(j==1)
+            {
+                return 15
+            }
+            else if(j==2||j==4){
+                if(i==0)
+                return 28 
+                else 
+                return 12
+            } 
+            else if(j==3||j==5){
+                if(i==0)
+                return 35
+                else
+                return 15
+            }
+        }
+        for(var i=0;i<7;i++)
+        {
+            for(var j=0;j<5;j++)
+            {
+                if(arr[i][j]=="1")
+                    {
+                        usDeposit=calcharge(i,j)+usDeposit
+                        fees=fees+usDeposit
+                    }
+            }
+        }    
+       const updated= await User.updateOne({email:req.user.email},{
+        $set:{
+           fees,
+           sDeposit:usDeposit,
+           datafull:true
+        }});
+        if(updated)
+        {
+           return res.json({success:true,msg:"Security fees updated",token:req.user.token});
+        }
+    
+        return res.json({success:false,msg:"Security fees recorded"});
+    
+    }
+    catch(err){
+        console.log(err);
+        next(err);
+     }
+}
+module.exports={
+    terOperationalExpense,
+    security
+
+}

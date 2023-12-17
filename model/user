@@ -17,10 +17,6 @@ const userschema=new schema({
         type:String,
         required:true
     },
-    gender:{
-        type:String,
-        required:true
-    },
   otp:{
         type:String
     },
@@ -36,7 +32,36 @@ const userschema=new schema({
     emailverify:{
         type:Boolean,
         default:false
-    }
+    },
+    type:{
+        type:String,
+        required:true
+    },
+    type:{
+        type:String,
+        required:true
+    },
+    programmes:[String],
+    fees:{
+        type:Number,
+        default:0
+    },
+    ter:{
+        type:Number,
+        default:0
+    },
+    oExpense:{
+        type:Number,
+        default:0
+    },
+    sDeposit:{
+        type:Number,
+        default:0
+    },
+    datafull:{
+        type:Boolean,
+        default:false
+    },
 
 
 });

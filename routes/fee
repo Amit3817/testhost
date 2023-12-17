@@ -1,0 +1,15 @@
+const express=require("express");
+const feescontroller=require("../controller/fees");
+const { body }=require("express-validator");
+const tokenverify=require("../middleware/isauth");
+const router=express.Router();
+
+router.post('/form2',tokenverify.verifytoken,
+feescontroller.terOperationalExpense);
+
+router.post('/form3',
+tokenverify.verifytoken,
+feescontroller.security);
+
+
+module.exports=router

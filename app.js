@@ -1,10 +1,12 @@
 const express=require('express');
 const { default: mongoose } = require('mongoose');
 const authroutes=require("./routes/authroutes");
+const feeroutes=require("./routes/fee");
 const cors=require("cors");
 const bodyParser = require('body-parser');
 const path=require("path")
 const fs = require('fs');
+const {chatting}=require("./chatting/mltalk")
 
 const dotenv=require('dotenv');
 dotenv.config();
@@ -16,12 +18,13 @@ app.use(express.json());
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.dburl)
   .then(result=>{
-    app.listen(2000);
+    app.listen(2000)
     console.log("connected");
 }).catch(err=>{
     console.log(err);
 });
-app.use(authroutes);
+app.use("/auth",authroutes);
+app.use("/fees",feeroutes);
 app.get('/download-pdf/:affidavit', (req, res) => {
   const {affidavit}=req.params
   const pdfFilePath = path.join(__dirname, `pdf/${affidavit}.pdf`);
@@ -39,6 +42,8 @@ app.get('/download-pdf/:affidavit', (req, res) => {
   const fileStream = fs.createReadStream(pdfFilePath);
   fileStream.pipe(res);
 });
+
+app.get('/chat',chatting)
 app.use('/',(req,res)=>{
   res.json({msg:"success"})
 })
