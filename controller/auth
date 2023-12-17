@@ -7,7 +7,7 @@ const { validationResult } = require('express-validator');
 
 const signup=async (req,res,next)=>{
    try{
-    const {email,password,gender,name}=req.body;
+    const {email,password,name}=req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const error = new Error('Validation failed.');
@@ -31,8 +31,7 @@ const signup=async (req,res,next)=>{
       await User.create({
          email:email.toLowerCase(),
          password:encpassword,
-         name,
-         gender
+         name
      });
      next();
    }

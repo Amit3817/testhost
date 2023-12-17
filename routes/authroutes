@@ -22,10 +22,6 @@ router.post('/signup',
 
     body('name','Please enter valid name')
     .trim()
-    .isLength({min:2}),
-
-    body('gender','Gender not selected')
-    .trim()
     .isLength({min:2})
 
 ],authcontroller.signup,mailer.sent);
