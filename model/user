@@ -34,14 +34,9 @@ const userschema=new schema({
         default:false
     },
     type:{
-        type:String,
-        required:true
+        type:String
     },
-    type:{
-        type:String,
-        required:true
-    },
-    programmes:[String],
+    programs:[String],
     fees:{
         type:Number,
         default:0

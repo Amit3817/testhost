@@ -8,13 +8,13 @@ const terOperationalExpense=async (req,res)=>{
      return res.json({success:false,msg:"Please enter the option"});
     }
     const user=req.user
-    var fees;
+    var fees=user.fees;
     var uter;
     var program=new Array();
     var uoExpense;
     if(ter=="1")
     {
-      fees=user.fees+6.60
+      fees=fees+6.60
       uter=6.60
 
     }
@@ -24,26 +24,26 @@ const terOperationalExpense=async (req,res)=>{
     }
     else if(ter="3")
     {
-        fees=user.fees+8.80
+        fees=fees+8.80
         uter=8.80;
     }
     else if(ter="4")
     {
-        fees=user.fees+2.20
+        fees=fees+2.20
         uter=2.20;
     }
     if(oExpense=="1")
     {
-       fees=user.fees+100
+       fees=fees+100
        uoExpense=100,
        program.push("Engineering and technology")
     }
     else if(oExpense=="2"||oExpense=="3"||oExpense=="4"||oExpense=="5"||oExpense=="6"||oExpense=="7")
     {
-        fees=user.fees+50
+        fees=fees+50
         uoExpense=50
         if(oExpense=="2")
-        program.push("Plaaning")
+        program.push("Planing")
         if(oExpense=="3")
         program.push("Applied Arts and Crafts")
         if(oExpense=="4")
@@ -55,14 +55,15 @@ const terOperationalExpense=async (req,res)=>{
         if(oExpense=="7")
         program.push("Management")
     }
-
+    programs=[...program]
+    console.log(programs)
 
    const updated= await User.updateOne({email:req.user.email},{
     $set:{
        fees,
        ter:uter,
        oExpense:uoExpense,
-       programs:[...program],
+       programs
     }});
     if(updated)
     {

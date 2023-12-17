@@ -53,10 +53,7 @@ router.post('/login',
 
   router.post('/otpverify',
   [
-    body('email','Please enter a valid mail')
-    .normalizeEmail()
-    .not()
-     .isEmpty(),
+
 
     body('otp','Please enter a valid otp')
     .not()
