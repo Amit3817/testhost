@@ -3,12 +3,12 @@ const regex=require("../middleware/regex");
 
 const form1=async (req,res)=>{
     try{
-        const {iname,itype,rejected}=req.body
+        const {iname,atype,rejected}=req.body
         if(!iname)
         {
             return res.json({success:false,msg:"Please enter the institute name"});   
         }
-        if(!itype)
+        if(!atype)
         {
             return res.json({success:false,msg:"Please enter the institute type"});   
         }
@@ -22,7 +22,7 @@ const form1=async (req,res)=>{
         const updated= await User.updateOne({email:req.user.email},{
             $set:{
                 iname,
-                itype,
+                atype,
                 rejected
             }});
             if(updated)
@@ -53,27 +53,32 @@ const terOperationalExpense=async (req,res)=>{
     const user=req.user
     var fees=user.fees;
     var uter;
+    var itype;
     var program=new Array();
     var uoExpense;
     if(ter=="i")
     {
       fees=fees+6.60
       uter=6.60
+      itype="Government /Institution setup in J&K / Leh & Ladakh / North Eastern states/PwBD / Institution setup exclusively for women"
 
     }
     else if(ter="ii")
     {
         uter=0;
+        itype="Government/Government Aided Institutions/PPP mode"
     }
     else if(ter="iii")
     {
         fees=fees+8.80
         uter=8.80;
+        itype="All other institutions"
     }
     else if(ter="iv")
     {
         fees=fees+2.20
         uter=2.20;
+        itype="All Applicants under (i) and (iii) whose applications were rejected and issued Final LoR in the last academy year**"
     }
     if(oExpense=="i")
     {
@@ -106,7 +111,8 @@ const terOperationalExpense=async (req,res)=>{
        fees,
        ter:uter,
        oExpense:uoExpense,
-       programs
+       programs,
+       itype
     }});
     if(updated)
     {

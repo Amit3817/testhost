@@ -18,7 +18,7 @@ const signup=async (req,res,next)=>{
     const old=await User.findOne({email:email.toLowerCase()})
     if(!old){
 
-    if(!regex.checkpassword(password))
+    if(!regex.checkPassword(password))
      {
       return res.json({success:false,msg:"Please enter a strong password"});
      }

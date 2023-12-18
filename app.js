@@ -29,9 +29,6 @@ mongoose.connect(process.env.dburl)
 
 app.use("/auth", authroutes);
 app.use("/fees", feeroutes);
-app.get('/download-pdf/:affidavit', (req, res) => {
-  // ... (unchanged)
-});
 module.exports = server;
 
 

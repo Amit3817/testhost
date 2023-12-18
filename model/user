@@ -36,6 +36,9 @@ const userschema=new schema({
     itype:{
         type:String
     },
+    atype:{
+        type:String
+    },
     iname:{
         type:String
     },
