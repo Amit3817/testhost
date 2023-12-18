@@ -39,9 +39,9 @@ const form1=async (req,res)=>{
             return res.json({success:false,msg:"Institue name not added"});
         
         }
-        catch(err){
-            console.log(err);
-            next(err);
+        catch(error){
+            console.log(error);
+            next(error);
          }
 
         
@@ -53,6 +53,10 @@ const terOperationalExpense=async (req,res)=>{
     try{
     const {ter,oExpense}=req.body
     if(!ter)
+    {
+     return res.json({success:false,msg:"Please enter the option"});
+    }
+    if(!oExpense)
     {
      return res.json({success:false,msg:"Please enter the option"});
     }
@@ -161,9 +165,9 @@ const terOperationalExpense=async (req,res)=>{
     return res.json({success:false,msg:"Ter not recorded"});
 
 }
-catch(err){
-    console.log(err);
-    next(err);
+catch(err0r){
+    console.log(error);
+    next(error);
  }
 }
 
@@ -220,8 +224,8 @@ const security=async (req,res)=>{
     
     }
     catch(err){
-        console.log(err);
-        next(err);
+        console.log(error);
+        next(error);
      }
 }
 module.exports={

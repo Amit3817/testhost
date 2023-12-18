@@ -15,7 +15,7 @@ function chat(server) {
       try {
       
         const mlApiResponse = await axios.post(
-          'https://finals-g0nj.onrender.com/api/process_question',
+          socketq,
           {
             question:question
           },
@@ -38,7 +38,7 @@ function chat(server) {
         async function dissconect(){
           try{
           const mlApiResponse = await axios.delete(
-            "https://finals-g0nj.onrender.com/api/delete_chat_history"
+            socketd
           );
           return mlApiResponse.data
         }
