@@ -1,4 +1,5 @@
 const User=require('../model/user');
+const Institute=require("../model/institute")
 const regex=require("../middleware/regex");
 
 const form1=async (req,res)=>{
@@ -19,12 +20,17 @@ const form1=async (req,res)=>{
         if(regex.checkAbbreviation(iname)){
             return res.json({success:false,msg:"Institute name abbreviation cannot be 'IIM', 'IIT', 'IISc', 'NIT', 'IISER', 'IIIT', 'IIEST', 'AICTE', 'UGC', 'MoE', 'GoI'"});   
         }
-        const updated= await User.updateOne({email:req.user.email},{
-            $set:{
+        var uatype;
+        if(atype=="i")
+            uatype=="new"
+        else
+          uatype="old"
+        const updated= await Institute.create({
+                user:req.user._id,
                 iname,
-                atype,
+                atype:uatype,
                 rejected
-            }});
+              });
             if(updated)
             {
                return res.json({success:true,msg:"Form1 submitted successfully",token:req.user.token});
@@ -50,12 +56,13 @@ const terOperationalExpense=async (req,res)=>{
     {
      return res.json({success:false,msg:"Please enter the option"});
     }
-    const user=req.user
-    var fees=user.fees;
+    const institute=await Institute.findOne({user:req.user._id});
+    var fees=institute.fees;
     var uter;
     var itype;
     var program=new Array();
     var uoExpense;
+
     if(ter=="i")
     {
       fees=fees+6.60
@@ -63,50 +70,82 @@ const terOperationalExpense=async (req,res)=>{
       itype="Government /Institution setup in J&K / Leh & Ladakh / North Eastern states/PwBD / Institution setup exclusively for women"
 
     }
-    else if(ter="ii")
+    else if(ter=="ii")
     {
         uter=0;
         itype="Government/Government Aided Institutions/PPP mode"
     }
-    else if(ter="iii")
+    else if(ter=="iii")
     {
         fees=fees+8.80
         uter=8.80;
         itype="All other institutions"
     }
-    else if(ter="iv")
+    else if(ter=="iv")
     {
         fees=fees+2.20
         uter=2.20;
         itype="All Applicants under (i) and (iii) whose applications were rejected and issued Final LoR in the last academy year**"
     }
-    if(oExpense=="i")
+
+    for(var i=0;i<=oExpense.length;i++)
     {
+    if(oExpense[i]==true)
+    {
+        if(i==0){
        fees=fees+100
        uoExpense=100,
        program.push("Engineering and technology")
+        }
+        else if(i==1)
+        {
+            fees=fees+50
+            uoExpense=50
+            program.push("Planing")
+        }
+        else if(i==2)
+        {
+            fees=fees+50
+            uoExpense=50
+            program.push("Applied Arts and Crafts")
+        }
+        else if(i==3)
+        {
+            fees=fees+50
+            uoExpense=50
+            program.push("Hotel Management and Catering Technology")
+        }
+        else if(i==4)
+        {
+            fees=fees+50
+            uoExpense=50
+            program.push("Computer Apllication (MCA)")
+        }
+        else if(i==5)
+        {
+            fees=fees+50
+            uoExpense=50
+            program.push("Management")
+        }
+        else if(i==6)
+        {
+            fees=fees+50
+            uoExpense=50
+            program.push("Planing")
+        }
+        else if(i==7)
+        {
+            fees=fees+50
+            uoExpense=50
+            program.push("Planing")
+        }
+
     }
-    else if(oExpense=="ii"||oExpense=="iii"||oExpense=="iv"||oExpense=="v"||oExpense=="vi"||oExpense=="vii")
-    {
-        fees=fees+50
-        uoExpense=50
-        if(oExpense=="ii")
-        program.push("Planing")
-        if(oExpense=="iii")
-        program.push("Applied Arts and Crafts")
-        if(oExpense=="iv")
-        program.push("Design")
-        if(oExpense=="v")
-        program.push("Hotel Management and Catering Technology")
-        if(oExpense=="vi")
-        program.push("Computer Apllication (MCA)")
-        if(oExpense=="vii")
-        program.push("Management")
-    }
+}
     programs=[...program]
     console.log(programs)
 
-   const updated= await User.updateOne({email:req.user.email},{
+   const updated= await Institute.updateOne({user:req.user._id},{
     $set:{
        fees,
        ter:uter,
@@ -131,10 +170,9 @@ catch(err){
 const security=async (req,res)=>{
     try{
         const {secDeposit}=req.body
-        const user=req.user
-        var fees=user.fees;
-
-
+        const institute=await Institute.findOne({user:req.user._id});
+        var fees=institute.fees;
+        var usDeposit=0
 
         function calcharge(i,j){
              if(j==0)
@@ -160,14 +198,14 @@ const security=async (req,res)=>{
         {
             for(var j=0;j<=5;j++)
             {
-                if(arr[i][j]=="1")
+                if(secDeposit[i][j]==true)
                     {
                         usDeposit=calcharge(i,j)+usDeposit
                         fees=fees+usDeposit
                     }
             }
         }    
-       const updated= await User.updateOne({email:req.user.email},{
+       const updated= await Institute.updateOne({User:req.user._id},{
         $set:{
            fees,
            sDeposit:usDeposit,

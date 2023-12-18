@@ -1,0 +1,59 @@
+const mongoose=require('mongoose');
+
+const schema=mongoose.Schema;
+
+const institueschema=new schema({
+    user: {
+        type: schema.Types.ObjectId,
+        ref: 'user',
+        required:true,
+        unique:true
+      },
+    iname:{
+        type:String
+    },
+
+    itype:{
+        type:String
+    },
+
+    atype:{
+        type:String
+    },
+
+    rejected:{
+        type:Boolean,
+        default:false
+    },
+
+    programs:[String],
+
+    fees:{
+        type:Number,
+        default:0
+    },
+
+    ter:{
+        type:Number,
+        default:0
+    },
+
+    oExpense:{
+        type:Number,
+        default:0
+    },
+
+    sDeposit:{
+        type:Number,
+        default:0
+    },
+
+    datafull:{
+        type:Boolean,
+        default:false
+    },
+
+
+});
+
+module.exports=mongoose.model("institute",institueschema);
