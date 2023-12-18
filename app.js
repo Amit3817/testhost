@@ -4,7 +4,6 @@ const { default: mongoose } = require('mongoose');
 const authroutes = require("./routes/authroutes");
 const feeroutes = require("./routes/fee");
 const cors = require("cors");
-const bodyParser = require('body-parser');
 const path = require("path")
 const fs = require('fs');
 const { chat } = require("./sockets/socket");
@@ -29,7 +28,6 @@ mongoose.connect(process.env.dburl)
 
 app.use("/auth", authroutes);
 app.use("/fees", feeroutes);
-module.exports = server;
 
 
 app.use('/', (req, res) => {

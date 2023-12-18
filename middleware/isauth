@@ -1,5 +1,6 @@
 const jwt=require("jsonwebtoken");
 const User=require("../model/user");
+const Institute=require("../model/institute");
 const verifytoken=async (req,res,next)=>{
     try{
         let token=req.headers['accesstoken']||req.headers['authorization'];
@@ -11,9 +12,12 @@ const verifytoken=async (req,res,next)=>{
             if(err){
                 return res.json({success:false,msg:"Invalid or expired token",msg2:err});
             }
-            const {email}=payload;
-            const user=await User.findOne({email});
-            req.user=user;
+            const {email,user}=payload;
+            const auser=await User.findOne({email});
+            const institute=await Institute.findOne({user})
+            req.user=auser;
+            if(institute)
+            req.institute=institute
             next();
         });
         }

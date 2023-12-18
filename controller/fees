@@ -2,7 +2,7 @@ const User=require('../model/user');
 const Institute=require("../model/institute")
 const regex=require("../middleware/regex");
 
-const form1=async (req,res)=>{
+const form1=async (req,res,next)=>{
     try{
         const {iname,atype,rejected}=req.body
         if(!iname)
@@ -49,7 +49,7 @@ const form1=async (req,res)=>{
 
 
 
-const terOperationalExpense=async (req,res)=>{
+const terOperationalExpense=async (req,res,next)=>{
     try{
     const {ter,oExpense}=req.body
     if(!ter)
@@ -60,7 +60,7 @@ const terOperationalExpense=async (req,res)=>{
     {
      return res.json({success:false,msg:"Please enter the option"});
     }
-    const institute=await Institute.findOne({user:req.user._id});
+    const institute=req.institute
     var fees=institute.fees;
     var uter;
     var itype;
@@ -147,9 +147,8 @@ const terOperationalExpense=async (req,res)=>{
     }
 }
     programs=[...program]
-    console.log(programs)
 
-   const updated= await Institute.updateOne({user:req.user._id},{
+   const updated= await Institute.updateOne({user:req.institute.user},{
     $set:{
        fees,
        ter:uter,
@@ -171,10 +170,10 @@ catch(err0r){
  }
 }
 
-const security=async (req,res)=>{
+const security=async (req,res,next)=>{
     try{
         const {secDeposit}=req.body
-        const institute=await Institute.findOne({user:req.user._id});
+        const institute=req.institute
         var fees=institute.fees;
         var usDeposit=0
 
@@ -198,6 +197,23 @@ const security=async (req,res)=>{
                 return 15
             }
         }
+
+       function stringDefine(i,j){
+            if(j==0)
+            degree="Diploma/Post Diploma for Minority/Women's /PwBD /J&K /Ladakh /North Eastern States"
+            if(j==1)
+            degree="Diploma/Post Diploma for others"
+            if(j==2)
+            degree="Under Graduate for Minority/Women's /PwBD /J&K /Ladakh /North Eastern States"
+            if(j==3)
+            degree="Under Graduate for others"
+            if(j==4)
+            degree="Post Graduate Diploma/Post Graduate Degree for Minority/Women's /PwBD /J&K /Ladakh /North Eastern States"
+            if(j==5)
+            degree="Post Graduate Diploma/Post Graduate Degree for others"
+       }
+
+
         for(var i=0;i<7;i++)
         {
             for(var j=0;j<=5;j++)
@@ -205,7 +221,9 @@ const security=async (req,res)=>{
                 if(secDeposit[i][j]==true)
                     {
                         usDeposit=calcharge(i,j)+usDeposit
+
                         fees=fees+usDeposit
+
                     }
             }
         }    

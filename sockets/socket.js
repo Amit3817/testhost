@@ -2,7 +2,12 @@ const socketIO = require("socket.io");
 const axios = require("axios"); // Import axios
 
 function chat(server) {
-  const io = socketIO(server);
+  const io = require('socket.io')(server, {
+    cors: {
+      origin: '*', // Replace with your frontend URL
+      methods: ['GET', 'POST'],
+    },
+  });
 
   io.on("connection", function (socket) {
     console.log("a user connected");
@@ -15,7 +20,7 @@ function chat(server) {
       try {
       
         const mlApiResponse = await axios.post(
-          socketq,
+          process.env.socketq,
           {
             question:question
           },
@@ -38,7 +43,7 @@ function chat(server) {
         async function dissconect(){
           try{
           const mlApiResponse = await axios.delete(
-            socketd
+            process.env.socketd
           );
           return mlApiResponse.data
         }

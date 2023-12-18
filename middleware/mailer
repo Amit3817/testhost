@@ -11,6 +11,7 @@ const sent=async (req,res,next)=>{
   const otpGenerator = require('otp-generator')
   const old=await User.findOne({email:emailId.toLowerCase()});
   
+  
   const otp=otpGenerator.generate(4, { upperCaseAlphabets: false,lowerCaseAlphabets: false, specialChars: false });
 
 

@@ -49,7 +49,7 @@ catch(error){
 }
 }
 
-const login=async (req,res)=>{
+const login=async (req,res,next)=>{
    try{
 
 
@@ -66,7 +66,7 @@ if(user.emailverify==true)
    if(!cmp)
       return res.json({success:false,msg:"Wrong password"});
 
-   const token=jwt.sign({email:email.toLowerCase()},process.env.secretkey,{expiresIn:"1d"});
+   const token=jwt.sign({email:email.toLowerCase(),user:user._id},process.env.secretkey,{expiresIn:"1d"});
    const updated= await User.updateOne({email:email.toLowerCase()},{
    $set:{
       token
@@ -89,7 +89,11 @@ catch(error){
 const forgotpassword=async (req,res,next)=>{
    try{
       const email=req.body.email;
-      const token=jwt.sign({email:email.toLowerCase()},process.env.secretkey,{expiresIn:"1d"});
+      const user=await User.findOne({email:email.toLowerCase()})
+      if(!user){
+         return res.json({success:"false",message:"User not found"});
+      }
+      const token=jwt.sign({email:email.toLowerCase(),user:user._id},process.env.secretkey,{expiresIn:"1d"});
       const updated= await User.updateOne({email:email.toLowerCase()},{
          $set:{
             token
@@ -110,12 +114,11 @@ const otpverify=async (req,res,next)=>{
    try{
       const email=req.user.email;
       const otp=req.body.otp;
-      console.log(email);
       const user=await User.findOne({email:email.toLowerCase()});
       if(!user)
       return res.json({success:false,msg:"User does not exists"});
       const result=await bcrypt.compare(otp,user.otp);
-      const token=jwt.sign({email:email.toLowerCase()},process.env.secretkey,{expiresIn:"1d"});
+      const token=jwt.sign({email:email.toLowerCase(),user:user._id},process.env.secretkey,{expiresIn:"1d"});
       if(result)
       {
          const updated= await User.updateOne({email:email.toLowerCase()},{
@@ -148,13 +151,14 @@ const changepassword=async (req,res,next)=>{
       return res.json({success:false,msg:"Please enter a strong password"});
      }
      const encpassword=await bcrypt.hash(newpassword,12);
+     const user=await User.findOne({email:req.user.email});
      const updated= await User.updateOne({email:req.user.email},{
       $set:{
          password:encpassword
       }});
       if(updated)
       {
-         return res.json({success:true,msg:"Password changed"});
+         return res.json({success:true,msg:"Password changed",token:user.token});
       }
 
       return res.json({success:false,msg:"Password change failed"});
