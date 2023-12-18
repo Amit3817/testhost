@@ -3,21 +3,31 @@ const regex=require("../middleware/regex");
 
 const form1=async (req,res)=>{
     try{
-        const {iname}=req.body
+        const {iname,itype,rejected}=req.body
         if(!iname)
         {
             return res.json({success:false,msg:"Please enter the institute name"});   
+        }
+        if(!itype)
+        {
+            return res.json({success:false,msg:"Please enter the institute type"});   
+        }
+        if(!rejected)
+        {
+            return res.json({success:false,msg:"Please enter the rejected field"});   
         }
         if(regex.checkAbbreviation(iname)){
             return res.json({success:false,msg:"Institute name abbreviation cannot be 'IIM', 'IIT', 'IISc', 'NIT', 'IISER', 'IIIT', 'IIEST', 'AICTE', 'UGC', 'MoE', 'GoI'"});   
         }
         const updated= await User.updateOne({email:req.user.email},{
             $set:{
-                iname
+                iname,
+                itype,
+                rejected
             }});
             if(updated)
             {
-               return res.json({success:true,msg:"Institue name added",token:req.user.token});
+               return res.json({success:true,msg:"Form1 submitted successfully",token:req.user.token});
             }
         
             return res.json({success:false,msg:"Institue name not added"});

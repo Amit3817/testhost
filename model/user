@@ -39,6 +39,11 @@ const userschema=new schema({
     iname:{
         type:String
     },
+    rejected:{
+        type:Boolean,
+        default:false
+
+    },
     programs:[String],
     fees:{
         type:Number,
