@@ -33,7 +33,10 @@ const userschema=new schema({
         type:Boolean,
         default:false
     },
-    type:{
+    itype:{
+        type:String
+    },
+    iname:{
         type:String
     },
     programs:[String],

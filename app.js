@@ -1,52 +1,45 @@
-const express=require('express');
+const express = require('express');
+const http = require('http');
 const { default: mongoose } = require('mongoose');
-const authroutes=require("./routes/authroutes");
-const feeroutes=require("./routes/fee");
-const cors=require("cors");
+const authroutes = require("./routes/authroutes");
+const feeroutes = require("./routes/fee");
+const cors = require("cors");
 const bodyParser = require('body-parser');
-const path=require("path")
+const path = require("path")
 const fs = require('fs');
-const {chatting}=require("./chatting/mltalk")
+const { chat } = require("./sockets/socket");
 
-const dotenv=require('dotenv');
+const dotenv = require('dotenv');
 dotenv.config();
 
-const app=express();
-app.use(cors({origin:true}));
+const app = express();
+app.use(cors({ origin: true }));
 app.use(express.json());
+const server = http.createServer(app);
 
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.dburl)
-  .then(result=>{
-    app.listen(2000)
+  .then(result => {
+    server.listen(2000)
     console.log("connected");
-}).catch(err=>{
+  }).catch(err => {
     console.log(err);
-});
-app.use("/auth",authroutes);
-app.use("/fees",feeroutes);
+  });
+
+
+app.use("/auth", authroutes);
+app.use("/fees", feeroutes);
 app.get('/download-pdf/:affidavit', (req, res) => {
-  const {affidavit}=req.params
-  const pdfFilePath = path.join(__dirname, `pdf/${affidavit}.pdf`);
-
-  // Check if the file exists
-  if (!fs.existsSync(pdfFilePath)) {
-    return res.status(404).send('PDF file not found');
-  }
-
-  // Set headers for file download
-  res.setHeader('Content-Disposition', 'attachment; filename=downloaded.pdf');
-  res.setHeader('Content-Type', 'application/pdf');
-
-  // Stream the PDF file to the response
-  const fileStream = fs.createReadStream(pdfFilePath);
-  fileStream.pipe(res);
+  // ... (unchanged)
 });
+module.exports = server;
 
-app.get('/chat',chatting)
-app.use('/',(req,res)=>{
-  res.json({msg:"success"})
-})
+
+app.use('/', (req, res) => {
+  res.json({ msg: "success" })
+});
+chat(server);
+
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;

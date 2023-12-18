@@ -1,4 +1,37 @@
 const User=require('../model/user');
+const regex=require("../middleware/regex");
+
+const form1=async (req,res)=>{
+    try{
+        const {iname}=req.body
+        if(!iname)
+        {
+            return res.json({success:false,msg:"Please enter the institute name"});   
+        }
+        if(regex.checkAbbreviation(iname)){
+            return res.json({success:false,msg:"Institute name abbreviation cannot be 'IIM', 'IIT', 'IISc', 'NIT', 'IISER', 'IIIT', 'IIEST', 'AICTE', 'UGC', 'MoE', 'GoI'"});   
+        }
+        const updated= await User.updateOne({email:req.user.email},{
+            $set:{
+                iname
+            }});
+            if(updated)
+            {
+               return res.json({success:true,msg:"Institue name added",token:req.user.token});
+            }
+        
+            return res.json({success:false,msg:"Institue name not added"});
+        
+        }
+        catch(err){
+            console.log(err);
+            next(err);
+         }
+
+        
+    }
+
+
 
 const terOperationalExpense=async (req,res)=>{
     try{
@@ -12,47 +45,47 @@ const terOperationalExpense=async (req,res)=>{
     var uter;
     var program=new Array();
     var uoExpense;
-    if(ter=="1")
+    if(ter=="i")
     {
       fees=fees+6.60
       uter=6.60
 
     }
-    else if(ter="2")
+    else if(ter="ii")
     {
         uter=0;
     }
-    else if(ter="3")
+    else if(ter="iii")
     {
         fees=fees+8.80
         uter=8.80;
     }
-    else if(ter="4")
+    else if(ter="iv")
     {
         fees=fees+2.20
         uter=2.20;
     }
-    if(oExpense=="1")
+    if(oExpense=="i")
     {
        fees=fees+100
        uoExpense=100,
        program.push("Engineering and technology")
     }
-    else if(oExpense=="2"||oExpense=="3"||oExpense=="4"||oExpense=="5"||oExpense=="6"||oExpense=="7")
+    else if(oExpense=="ii"||oExpense=="iii"||oExpense=="iv"||oExpense=="v"||oExpense=="vi"||oExpense=="vii")
     {
         fees=fees+50
         uoExpense=50
-        if(oExpense=="2")
+        if(oExpense=="ii")
         program.push("Planing")
-        if(oExpense=="3")
+        if(oExpense=="iii")
         program.push("Applied Arts and Crafts")
-        if(oExpense=="4")
+        if(oExpense=="iv")
         program.push("Design")
-        if(oExpense=="5")
+        if(oExpense=="v")
         program.push("Hotel Management and Catering Technology")
-        if(oExpense=="6")
+        if(oExpense=="vi")
         program.push("Computer Apllication (MCA)")
-        if(oExpense=="7")
+        if(oExpense=="vii")
         program.push("Management")
     }
     programs=[...program]
@@ -109,7 +142,7 @@ const security=async (req,res)=>{
         }
         for(var i=0;i<7;i++)
         {
-            for(var j=0;j<5;j++)
+            for(var j=0;j<=5;j++)
             {
                 if(arr[i][j]=="1")
                     {
@@ -139,6 +172,6 @@ const security=async (req,res)=>{
 }
 module.exports={
     terOperationalExpense,
-    security
+    security,form1
 
 }

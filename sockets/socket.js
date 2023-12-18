@@ -1,20 +1,59 @@
-// const socketIO = require("socket.io");
+const socketIO = require("socket.io");
+const axios = require("axios"); // Import axios
 
+function chat(server) {
+  const io = socketIO(server);
 
-// const chatting=(server)=>{
-//     const io = socketIO(server);
-// io.on("connection", function(socket) {
-//     const io = socketIO(server);
-//     console.log("a user connected");
-  
+  io.on("connection", function (socket) {
+    console.log("a user connected");
 
-  
-//     socket.on("disconnect", function() {
-//       console.log("user disconnected");
-//     });
-//   });
-// }
+    socket.on("question", (question) => {
 
-// module.exports={
-// chatting
-//  }
+    console.log(question)
+
+      async function connect(){
+      try {
+      
+        const mlApiResponse = await axios.post(
+          'https://finals-g0nj.onrender.com/api/process_question',
+          {
+            question:question
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        console.log(mlApiResponse.data); // Assuming the response is JSON
+      } catch (error) {
+        console.error("Error processing question:", error.message);
+      }
+    }
+    connect()
+    });
+
+    socket.on("dissconnect", async function () {
+
+        async function dissconect(){
+          try{
+          const mlApiResponse = await axios.delete(
+            "https://finals-g0nj.onrender.com/api/delete_chat_history"
+          );
+          return mlApiResponse.data
+        }
+        catch(err)
+        {
+        console.error("Error processing question:", error.message);
+        }
+      }
+       const data= await dissconect()
+       if(data.message=="Chat history deleted successfully")
+      console.log("user disconnected and chat history deleted");
+    });
+  });
+}
+
+module.exports = {
+  chat
+};

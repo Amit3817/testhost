@@ -1,7 +1,7 @@
 const User=require('../model/user');
 const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken");
-const checkpassword=require("../middleware/regex");
+const regex=require("../middleware/regex");
 const { validationResult } = require('express-validator');
 
 
@@ -18,7 +18,7 @@ const signup=async (req,res,next)=>{
     const old=await User.findOne({email:email.toLowerCase()})
     if(!old){
 
-    if(!checkpassword(password))
+    if(!regex.checkpassword(password))
      {
       return res.json({success:false,msg:"Please enter a strong password"});
      }

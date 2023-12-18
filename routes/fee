@@ -4,6 +4,12 @@ const { body }=require("express-validator");
 const tokenverify=require("../middleware/isauth");
 const router=express.Router();
 
+
+router.post('/form1',
+tokenverify.verifytoken,
+feescontroller.form1);
+
+
 router.post('/form2',tokenverify.verifytoken,
 feescontroller.terOperationalExpense);
 
