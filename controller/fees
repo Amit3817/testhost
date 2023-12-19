@@ -21,16 +21,33 @@ const form1=async (req,res,next)=>{
             uatype=="new"
         else
           uatype="old"
-        const updated= await Institute.create({
+        if(req.institute){
+        const created= await Institute.create({
                 user:req.user._id,
                 iname,
                 atype:uatype,
                 rejected
               });
+            if(created)
+            {
+               return res.json({success:true,msg:"Form1 submitted successfully",token:req.user.token});
+            }
+        }
+        else{
+            const updated= await Institute.updateOne({
+                user:req.user._id},{
+                $set:{
+                iname,
+                atype:uatype,
+                rejected
+                }
+              });
             if(updated)
             {
                return res.json({success:true,msg:"Form1 submitted successfully",token:req.user.token});
             }
+
+        }
         
             return res.json({success:false,msg:"Institue name not added"});
         
