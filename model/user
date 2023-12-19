@@ -32,42 +32,7 @@ const userschema=new schema({
     emailverify:{
         type:Boolean,
         default:false
-    },
-    itype:{
-        type:String
-    },
-    atype:{
-        type:String
-    },
-    iname:{
-        type:String
-    },
-    rejected:{
-        type:Boolean,
-        default:false
-
-    },
-    programs:[String],
-    fees:{
-        type:Number,
-        default:0
-    },
-    ter:{
-        type:Number,
-        default:0
-    },
-    oExpense:{
-        type:Number,
-        default:0
-    },
-    sDeposit:{
-        type:Number,
-        default:0
-    },
-    datafull:{
-        type:Boolean,
-        default:false
-    },
+    }
 
 
 });

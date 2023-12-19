@@ -1,16 +1,63 @@
+const confidential = require("../model/confidential");
+const axios = require("axios");
+const request = require('request');
+const FormData = require('form-data');
+const fs = require('fs');
+const path = require("path");
 
-
-const uploading=async (req,res,next)=>{
+const uploading = async (req, res, next) => {
+  try {
     if (!req.files) {
-        return res.status(400).json({success:false,msg:'No files uploaded.'});
+      return res.status(400).json({ success: false, msg: 'No files uploaded.' });
     }
-      return res.json({
-        success:true,msg:"Files uploaded successfully"
-      })
+
+    const { aadhar, pan } = req.files;
+    
+    // Assuming that `ocr` is an asynchronous function that returns a promise
+    const apiKey = 'K88469844388957';
+    // const imagePath = path.join(__dirname, '../uploads/aadhar-6580a19a4e6d35a20586bfd3.jpg');
+    
+    imagePath=aadhar[0].path
+    request({
+          method: 'POST',
+          url: 'https://api.ocr.space/parse/image',
+          formData: {
+              apikey: apiKey,
+              file: {
+                  value: fs.createReadStream(imagePath),
+                  options: {
+                      filename: path.basename(imagePath),
+                      contentType: 'image/jpeg', // Adjust based on your image format
+                  },
+              },
+          },
+      }, (error, response, body) => {
+          if (error) {
+              console.error('Error:', error);
+          } else {
+              const result = JSON.parse(body);
+              const text = result.ParsedResults[0].ParsedText;
+
+              const nameMatch = text.match(/([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)/);
+              const name = nameMatch ? nameMatch[0] : '';
+
+              // Extracting the number
+              const numberMatch = text.match(/\b\d{4}\s\d{4}\s\d{4}\b/);
+              const number = numberMatch ? numberMatch[0] : '';
+
+              console.log(text);
+
+
+
+              // Continue with the rest of your logic or send the response here
+              return res.json({ success: true });
+          }}) 
+        }catch (error) {
+              console.error(error);
+              next(error);
+          }
+      }
+
+module.exports = {
+  uploading,
 }
-
-module.exports={
-    uploading
-}
-
-
