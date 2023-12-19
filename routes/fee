@@ -41,6 +41,13 @@ router.post('/form2',[
 feescontroller.terOperationalExpense);
 
 router.post('/form3',
+[
+    body('secDeposit','Please tick atleast one field from each row')
+    .not()
+     .isEmpty()
+ 
+ ],
+
 tokenverify.verifytoken,
 feescontroller.security);
 
