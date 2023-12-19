@@ -22,7 +22,7 @@ const form1=async (req,res,next)=>{
         else
           uatype="old"
         if(req.institute){
-        const created= await Institute.create({
+        const created= await Institute.updateOne({
                 user:req.user._id,
                 iname,
                 atype:uatype,
@@ -34,7 +34,7 @@ const form1=async (req,res,next)=>{
             }
         }
         else{
-            const updated= await Institute.updateOne({
+            const updated= await Institute.create({
                 user:req.user._id},{
                 $set:{
                 iname,
