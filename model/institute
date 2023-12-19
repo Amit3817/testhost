@@ -27,6 +27,7 @@ const institueschema=new schema({
     },
 
     programs:[String],
+    degreeDetails:[String],
 
     fees:{
         type:Number,

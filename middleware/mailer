@@ -10,37 +10,47 @@ const sent=async (req,res,next)=>{
   const emailId=req.body.email||req.user.email;
   const otpGenerator = require('otp-generator')
   const old=await User.findOne({email:emailId.toLowerCase()});
-  
-  
+
   const otp=otpGenerator.generate(4, { upperCaseAlphabets: false,lowerCaseAlphabets: false, specialChars: false });
 
 
-
-    // Create a SMTP transporter object
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      auth: {
-          user: 'edwin9@ethereal.email',
-          pass: 'UQ4K1ejnkqHke6tkYR'
-      }});
-    // Message object
-    let message = {
-        from: 'otpverify@aicte',
-        to: emailId,
-        text: `Your otp is ${otp}`,
-        html: `<p><b>${otp}</b> is the otp</p>`
-    };
-    transporter.sendMail(message, (err, info) => {
-        if (err) {
-            console.log('Error occurred. ' + err.message);
-            return process.exit(1);
-        }
-
-        console.log('Message sent: %s', info.messageId);
-        // Preview only available when sending through an Ethereal account
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    });
+  async function mail(){
+      try{
+        var transporter = nodemailer.createTransport({
+          secure: true, 
+          service:'gmail',
+          auth: {
+          user: process.env.AUTH_EMAIL, 
+          pass: process.env.AUTH_PASS, 
+          authentication:'plain'
+          },
+           tls : {
+          rejectUnauthorized:false
+           }
+        });
+        const data={
+          from: 'Sahayak@aicte',  
+          to:emailId,
+          subject: "Verify your email",  
+          text:`Your otp is ${otp}` 
+         
+         }
+  
+         await transporter.sendMail(data,async(error,info)=>{
+          if(error){
+              throw new error;
+          }
+  
+         });
+      }
+      catch(err){
+        console.log(err);
+      }
+  }
+ await mail()
+  // const image=require('')
+  
+    
       const token=jwt.sign({email:emailId.toLowerCase()},process.env.secretkey,{expiresIn:"1d"});
       const otp2=await bcrypt.hash(otp,12);
       const updated= await User.updateOne({email:emailId.toLowerCase()},{

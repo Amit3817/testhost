@@ -13,9 +13,6 @@ function chat(server) {
     console.log("a user connected");
 
     socket.on("question", (question) => {
-
-    console.log(question)
-
       async function connect(){
       try {
       
@@ -30,7 +27,7 @@ function chat(server) {
             },
           }
         );
-        console.log(mlApiResponse.data); // Assuming the response is JSON
+       mlApiResponse.data.chat
       } catch (error) {
         console.error("Error processing question:", error.message);
       }

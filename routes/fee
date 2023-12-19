@@ -1,5 +1,6 @@
 const express=require("express");
 const feescontroller=require("../controller/fees");
+const response=require("../controller/response");
 const { body }=require("express-validator");
 const tokenverify=require("../middleware/isauth");
 const router=express.Router();
@@ -16,6 +17,11 @@ feescontroller.terOperationalExpense);
 router.post('/form3',
 tokenverify.verifytoken,
 feescontroller.security);
+
+
+router.post('/summary',
+tokenverify.verifytoken,
+response.result);
 
 
 module.exports=router

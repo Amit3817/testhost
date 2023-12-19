@@ -3,6 +3,7 @@ const http = require('http');
 const { default: mongoose } = require('mongoose');
 const authroutes = require("./routes/authroutes");
 const feeroutes = require("./routes/fee");
+const fileroutes = require("./routes/file");
 const cors = require("cors");
 const path = require("path")
 const fs = require('fs');
@@ -28,6 +29,7 @@ mongoose.connect(process.env.dburl)
 
 app.use("/auth", authroutes);
 app.use("/fees", feeroutes);
+app.use("/file", fileroutes);
 
 
 app.use('/', (req, res) => {

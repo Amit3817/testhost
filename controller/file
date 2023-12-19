@@ -1,0 +1,19 @@
+
+
+const uploading=async (req,res,next)=>{
+    if (!req.file) {
+        return res.status(400).json({success:false,msg:'No file uploaded.'});
+      }
+    
+      // Store the filename in the request object
+      console.log(req.file.filename)
+      return res.json({
+        success:true
+      })
+}
+
+module.exports={
+    uploading
+}
+
+

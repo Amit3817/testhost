@@ -137,16 +137,10 @@ const terOperationalExpense=async (req,res,next)=>{
             uoExpense=50
             program.push("Planing")
         }
-        else if(i==7)
-        {
-            fees=fees+50
-            uoExpense=50
-            program.push("Planing")
-        }
 
     }
 }
-    programs=[...program]
+    var programs=[...program]
 
    const updated= await Institute.updateOne({user:req.institute.user},{
     $set:{
@@ -197,20 +191,23 @@ const security=async (req,res,next)=>{
                 return 15
             }
         }
+        var fullDegree="";
+        var degreeDetails=new Array();
 
-       function stringDefine(i,j){
+       function stringDefine(j){
+        var degree;
             if(j==0)
-            degree="Diploma/Post Diploma for Minority/Women's /PwBD /J&K /Ladakh /North Eastern States"
-            if(j==1)
-            degree="Diploma/Post Diploma for others"
-            if(j==2)
-            degree="Under Graduate for Minority/Women's /PwBD /J&K /Ladakh /North Eastern States"
-            if(j==3)
-            degree="Under Graduate for others"
-            if(j==4)
-            degree="Post Graduate Diploma/Post Graduate Degree for Minority/Women's /PwBD /J&K /Ladakh /North Eastern States"
-            if(j==5)
-            degree="Post Graduate Diploma/Post Graduate Degree for others"
+              return degree="Diploma/Post Diploma for Minority/Women's /PwBD /J&K /Ladakh /North Eastern States"
+            else if(j==1)
+               return degree="Diploma/Post Diploma for others"
+            else if(j==2)
+               return degree="Under Graduate for Minority/Women's /PwBD /J&K /Ladakh /North Eastern States"
+            else if(j==3)
+                return degree="Under Graduate for others"
+            else if(j==4)
+                 return degree="Post Graduate Diploma/Post Graduate Degree for Minority/Women's /PwBD /J&K /Ladakh /North Eastern States"
+            else if(j==5)
+            return degree="Post Graduate Diploma/Post Graduate Degree for others"
        }
 
 
@@ -221,17 +218,23 @@ const security=async (req,res,next)=>{
                 if(secDeposit[i][j]==true)
                     {
                         usDeposit=calcharge(i,j)+usDeposit
-
+                        if(fullDegree=="")
+                        fullDegree=fullDegree+stringDefine(j)
+                        else
+                        fullDegree=fullDegree+" and "+stringDefine(j)
                         fees=fees+usDeposit
 
                     }
             }
+            degreeDetails.push(fullDegree);
+            fullDegree=""
         }    
        const updated= await Institute.updateOne({User:req.user._id},{
         $set:{
            fees,
            sDeposit:usDeposit,
-           datafull:true
+           datafull:true,
+           degreeDetails
         }});
         if(updated)
         {
