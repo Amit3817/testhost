@@ -1,21 +1,17 @@
 const User=require('../model/user');
 const Institute=require("../model/institute")
 const regex=require("../middleware/regex");
+const { validationResult } = require('express-validator');
 
 const form1=async (req,res,next)=>{
     try{
         const {iname,atype,rejected}=req.body
-        if(!iname)
-        {
-            return res.json({success:false,msg:"Please enter the institute name"});   
-        }
-        if(!atype)
-        {
-            return res.json({success:false,msg:"Please enter the institute type"});   
-        }
-        if(!rejected)
-        {
-            return res.json({success:false,msg:"Please enter the rejected field"});   
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          const error = new Error('Validation failed.');
+          error.statusCode = 422;
+          error.data = errors.array();
+          next(error);
         }
         if(regex.checkAbbreviation(iname)){
             return res.json({success:false,msg:"Institute name abbreviation cannot be 'IIM', 'IIT', 'IISc', 'NIT', 'IISER', 'IIIT', 'IIEST', 'AICTE', 'UGC', 'MoE', 'GoI'"});   
@@ -52,13 +48,12 @@ const form1=async (req,res,next)=>{
 const terOperationalExpense=async (req,res,next)=>{
     try{
     const {ter,oExpense}=req.body
-    if(!ter)
-    {
-     return res.json({success:false,msg:"Please enter the option"});
-    }
-    if(!oExpense)
-    {
-     return res.json({success:false,msg:"Please enter the option"});
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const error = new Error('Validation failed.');
+      error.statusCode = 422;
+      error.data = errors.array();
+      next(error);
     }
     const institute=req.institute
     var fees=institute.fees;
@@ -167,6 +162,13 @@ catch(err0r){
 const security=async (req,res,next)=>{
     try{
         const {secDeposit}=req.body
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          const error = new Error('Validation failed.');
+          error.statusCode = 422;
+          error.data = errors.array();
+          next(error);
+        }
         const institute=req.institute
         var fees=institute.fees;
         var usDeposit=0

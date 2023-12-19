@@ -12,10 +12,7 @@ const uploading = async (req, res, next) => {
     }
 
     const { aadhar, pan } = req.files;
-    
-    // Assuming that `ocr` is an asynchronous function that returns a promise
     const apiKey = 'K88469844388957';
-    // const imagePath = path.join(__dirname, '../uploads/aadhar-6580a19a4e6d35a20586bfd3.jpg');
     
     imagePath=aadhar[0].path
     request({

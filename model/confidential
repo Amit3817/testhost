@@ -16,7 +16,7 @@ const confidentialSchema=new schema({
     },
     pan:{
         type:String,
-        required:true
+        // required:true
     },
   dob:{
         type:String,

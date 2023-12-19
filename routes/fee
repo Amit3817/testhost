@@ -7,17 +7,49 @@ const router=express.Router();
 
 
 router.post('/form1',
+[
+    body('iname','Please enter a valid iname')
+    .not()
+     .isEmpty()
+ 
+ ,
+     body('atype','Please enter valid whether your institute is new or existing')
+     .not()
+     .isEmpty()
+     ,
+ 
+     body('rejected','Please enter valid response for rejected')
+     .not()
+     .isEmpty()
+ 
+ ],
 tokenverify.verifytoken,
 feescontroller.form1);
 
 
-router.post('/form2',tokenverify.verifytoken,
+router.post('/form2',[
+    body('ter','Please enter a valid institution type')
+    .not()
+     .isEmpty()
+ 
+ ,
+     body('oExpense','Please tick atleast one option in programmes')
+     .not()
+     .isEmpty()
+ 
+ ],tokenverify.verifytoken,
 feescontroller.terOperationalExpense);
 
 router.post('/form3',
+[
+    body('secDeposit','Please tick atleast one field from each row')
+    .not()
+     .isEmpty()
+ 
+ ],
+
 tokenverify.verifytoken,
 feescontroller.security);
-
 
 router.post('/summary',
 tokenverify.verifytoken,

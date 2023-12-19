@@ -1,0 +1,43 @@
+const confidential=require('../model/confidentail');
+const bcrypt=require("bcryptjs");
+const jwt=require("jsonwebtoken");
+const regex=require("../middleware/regex");
+const { validationResult } = require('express-validator');
+
+
+const doctrail=async (req,res,next)=>{
+   try{
+    const {longstring,dob,number}=req.body;
+    // const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   const error = new Error('Validation failed.');
+    //   error.statusCode = 422;
+    //   error.data = errors.array();
+    //   next(error);
+    // }
+
+    const nameToCheck = req.user.name;
+    
+    const containsName = new RegExp(req.user.name).test(longstring);
+    if(containsName){
+    const created=await confidential.create({
+        user:req.user._id,
+        aadhar:number,
+        dob:dob
+    })
+    if(created){
+        return res.json({success:true,msg:"User data stored successfully",token:req.user.token});
+    }
+    else{
+        return res.json({success:false,msg:"User data not stored successfully"});
+
+    }        
+}     
+   }
+catch(error){
+   console.log(error);
+   
+   next(error);
+
+}
+}

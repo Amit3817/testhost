@@ -29,10 +29,10 @@ const sent=async (req,res,next)=>{
            }
         });
         const data={
-          from: 'Sahayak@aicte',  
+          from: 'sahayak@aicte.com',  
           to:emailId,
           subject: "Verify your email",  
-          text:`Your otp is ${otp}` 
+          text:`Here is your four digit OTP for login ${otp} . Do not share it with anyone, if this is not you contact support.` 
          
          }
   
