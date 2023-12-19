@@ -7,7 +7,10 @@ const router=express.Router();
 
 
 router.post('/upload',
-tokenverify.verifytoken,middleware.upload.single('image'),file.uploading);
+tokenverify.verifytoken,middleware.upload.fields([
+    { name: 'aadhar', maxCount: 1 },
+    { name: 'pan', maxCount: 1 },
+  ]),file.uploading);
 
 
 
