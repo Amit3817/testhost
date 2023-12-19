@@ -51,7 +51,7 @@ router.post('/form3',
 tokenverify.verifytoken,
 feescontroller.security);
 
-router.post('/summary',
+router.post('/response',
 tokenverify.verifytoken,
 response.result);
 
