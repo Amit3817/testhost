@@ -154,7 +154,7 @@ const terOperationalExpense=async (req,res,next)=>{
 }
     var programs=[...program]
 
-   const updated= await Institute.updateOne({user:req.institute.user},{
+   const updated= await Institute.updateOne({user:req.user._id},{
     $set:{
        fees,
        ter:uter,
