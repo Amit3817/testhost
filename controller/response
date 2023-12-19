@@ -90,7 +90,7 @@ const result=async (req,res,next)=>{
     //   const normsContent=norms.data.msg.chat_history[norms.data.msg.chat_history.length - 1].content
     //   const normsIndex=normsContent.indexOf('\n');
     //   const normsAnswer=normsContent.substring(normsIndex + 2);
-      return res.json({success:true,institute:institute,token:req.user.token});
+      return res.json({success:true,institute:institute,user:req.user,token:req.user.token});
 
 }
 catch(error){
