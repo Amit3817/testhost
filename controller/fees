@@ -240,7 +240,7 @@ const security=async (req,res,next)=>{
         }});
         if(updated)
         {
-           return res.json({success:true,msg:"Security fees updated",token:req.user.token,user:req.user,institute:req.institute});
+           return res.json({success:true,msg:"Security fees updated",token:req.user.token,institute:req.institute});
         }
     
         return res.json({success:false,msg:"Security fees recorded"});

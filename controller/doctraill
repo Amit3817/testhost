@@ -8,14 +8,6 @@ const { validationResult } = require('express-validator');
 const doctrail=async (req,res,next)=>{
    try{
     const {longstring,dob,number}=req.body;
-    // const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   const error = new Error('Validation failed.');
-    //   error.statusCode = 422;
-    //   error.data = errors.array();
-    //   next(error);
-    // }
-
     const nameToCheck = req.user.name;
     
     const containsName = new RegExp(req.user.name).test(longstring);
