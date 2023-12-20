@@ -3,11 +3,11 @@ const http = require('http');
 const { default: mongoose } = require('mongoose');
 const authroutes = require("./routes/authroutes");
 const feeroutes = require("./routes/fee");
-const fileroutes = require("./routes/file");
+const {status} = require("./controller/submit");
+const tokenverify=require("./middleware/isauth");
 const cors = require("cors");
 const path = require("path")
 const fs = require('fs');
-const { chat } = require("./sockets/socket");
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -29,13 +29,11 @@ mongoose.connect(process.env.dburl)
 
 app.use("/auth", authroutes);
 app.use("/fees", feeroutes);
-app.use("/file", fileroutes);
-
+app.post("/status",tokenverify.verifytoken,status)
 
 app.use('/', (req, res) => {
   res.json({ msg: "success" })
 });
-chat(server);
 
 app.use((error, req, res, next) => {
   console.log(error);

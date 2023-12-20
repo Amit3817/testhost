@@ -53,6 +53,10 @@ const institueschema=new schema({
         type:Boolean,
         default:false
     },
+    status:{
+       type:String,
+       default:""
+    }
 
 
 });

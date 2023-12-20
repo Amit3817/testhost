@@ -1,0 +1,29 @@
+const Institute=require('../model/user');
+
+
+
+const status=async (req,res,next)=>{
+   try{
+    const status="Application submitted for approval"
+      const updated= await Institute.updateOne({user:req.user._id},{
+         $set:{
+            status:status
+         }});
+         if(updated)
+         {
+            console.log(1)
+            return res.json({success:true,status:status,token:req.user.token})
+         }
+         return res.json({success:false,token:updated.token})
+   }
+   catch(err)
+   {
+
+      console.log(err);
+      next(err);
+   }
+}
+
+module.exports={
+    status
+}
