@@ -27,7 +27,8 @@ const form1=async (req,res,next)=>{
             $set:{
                 iname,
                 atype:uatype,
-                rejected
+                rejected,
+                fees:0
               }});
             if(created)
             {
@@ -72,7 +73,6 @@ const terOperationalExpense=async (req,res,next)=>{
       next(error);
     }
     const institute=req.institute
-    console.log(institute)
     var fees=institute.fees;
     var uter;
     var itype;
