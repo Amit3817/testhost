@@ -12,9 +12,14 @@ const verifytoken=async (req,res,next)=>{
             if(err){
                 return res.json({success:false,msg:"Invalid or expired token",msg2:err});
             }
+            console.log(payload)
+        
             const {email,user}=payload;
+      
             const auser=await User.findOne({email});
-            const institute=await Institute.findOne({user})
+            console.log(user)
+            const institute=await Institute.findOne({user:user})
+            console.log(institute)
             req.user=auser;
             if(institute)
             req.institute=institute

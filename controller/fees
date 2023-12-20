@@ -21,26 +21,25 @@ const form1=async (req,res,next)=>{
             uatype=="new"
         else
           uatype="old"
-        if(req.institute){
-        const created= await Institute.updateOne({
+        const old=await Institute.findOne({user:req.user._id}) 
+                  if(old){
+        const created= await Institute.updateOne({user:req.user._id},{
+            $set:{
+                iname,
+                atype:uatype,
+                rejected
+              }});
+            if(created)
+            {
+               return res.json({success:true,msg:"Form1 updated successfully",token:req.user.token});
+            }
+        }
+        else if(!old){
+            const updated= await Institute.create({
                 user:req.user._id,
                 iname,
                 atype:uatype,
                 rejected
-              });
-            if(created)
-            {
-               return res.json({success:true,msg:"Form1 submitted successfully",token:req.user.token});
-            }
-        }
-        else{
-            const updated= await Institute.create({
-                user:req.user._id},{
-                $set:{
-                iname,
-                atype:uatype,
-                rejected
-                }
               });
             if(updated)
             {
@@ -73,6 +72,7 @@ const terOperationalExpense=async (req,res,next)=>{
       next(error);
     }
     const institute=req.institute
+    console.log(institute)
     var fees=institute.fees;
     var uter;
     var itype;
@@ -170,7 +170,7 @@ const terOperationalExpense=async (req,res,next)=>{
     return res.json({success:false,msg:"Ter not recorded"});
 
 }
-catch(err0r){
+catch(error){
     console.log(error);
     next(error);
  }

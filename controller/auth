@@ -57,7 +57,6 @@ const login=async (req,res,next)=>{
 
 
 const user=await User.findOne({email:email.toLowerCase()});
-console.log(req.body);
 if(!user)
    return res.json({success:false,msg:"User not found"});
 if(user.emailverify==true)
@@ -65,11 +64,10 @@ if(user.emailverify==true)
    const cmp=await bcrypt.compare(password,user.password);
    if(!cmp)
       return res.json({success:false,msg:"Wrong password"});
-
    const token=jwt.sign({email:email.toLowerCase(),user:user._id},process.env.secretkey,{expiresIn:"1d"});
    const updated= await User.updateOne({email:email.toLowerCase()},{
    $set:{
-      token
+      token:token
    }});
    if(updated)
    {
