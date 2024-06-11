@@ -14,8 +14,7 @@ const userschema=new schema({
         required:true
     },
     name:{
-        type:String,
-        required:true
+        type:String
     },
   otp:{
         type:String
